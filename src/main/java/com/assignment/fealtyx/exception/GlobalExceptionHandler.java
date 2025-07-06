@@ -29,5 +29,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGeneric(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong.");
     }
+
+    @ExceptionHandler(OllamaUnavailableException.class)
+    public ResponseEntity<String> handleOllamaUnavailable(OllamaUnavailableException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(ex.getMessage());
+    }
 }
 

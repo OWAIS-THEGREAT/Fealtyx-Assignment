@@ -2,6 +2,7 @@ package com.assignment.fealtyx.service;
 
 import com.assignment.fealtyx.dto.OllamaRequest;
 import com.assignment.fealtyx.dto.OllamaResponse;
+import com.assignment.fealtyx.exception.OllamaUnavailableException;
 import com.assignment.fealtyx.model.Student;
 import com.assignment.fealtyx.utils.PromptBuilder;
 import com.assignment.fealtyx.configuration.OllamaConfig;
@@ -47,12 +48,12 @@ public class OllamaService {
                 return response.getBody().getResponse();
             } else {
                 log.warn("Ollama responded with non-success status: {}", response.getStatusCode());
-                return "Unable to generate summary at this time.";
+                throw new OllamaUnavailableException("Ollama returned non-success status: " + response.getStatusCode());
             }
 
         } catch (RestClientException ex) {
             log.error("Error communicating with Ollama service", ex);
-            return "Ollama service unavailable. Please try again later.";
+            throw new OllamaUnavailableException("Ollama service unavailable");
         }
     }
 }
